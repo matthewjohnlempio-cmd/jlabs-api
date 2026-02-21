@@ -7,10 +7,10 @@ mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("Connected to MongoDB");
 
-    const hashedPassword = await bcrypt.hash("5211535", 10); // HASH THE PASSWORD
+    const hashedPassword = await bcrypt.hash("TestPass123!", 10); // HASH THE PASSWORD
 
     const user = new User({
-      email: "admin@gmail.com",
+      email: "devuser@jlabs.test",
       password: hashedPassword, // USE THE HASHED PASSWORD
     });
 
