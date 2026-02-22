@@ -47,6 +47,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    
     - Create a new file called .env in the project root (use any text editor)
     - Or copy the example as a starting point:
+      
 
    ```bash
    # Windows (PowerShell / CMD)
