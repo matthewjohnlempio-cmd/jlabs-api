@@ -70,14 +70,22 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
       - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
       - In Atlas Network Access → add `0.0.0.0/0` (allow all IPs for testing)
         
-5. **Seed the test user**
-   Creates `devuser@jlabs.test` / `TestPass123!`
-   ```bash
-   node seed/userSeeder.js
-   ```
-   Expected output: "User seeded!"
+4. **Seed the test user**  
+   This script creates a single test user in your MongoDB database so you can log in.
 
-6. **Start the server**
+   - **What it does**:
+     - Connects to your MongoDB (using the `MONGO_URI` from `.env`)
+     - Hashes the password "TestPass123!"
+     - Creates a user with:
+       - Email: `devuser@jlabs.test`
+       - Password: `TestPass123!` (plain text — do **not** use this in production!)
+     - Saves the user to the `users` collection in your `jlabs_db` database
+
+   - **Run the seeder**:
+     ```bash
+     node seed/userSeeder.js
+
+5. **Start the server**
    ```bash
    npm start
    # or
@@ -85,7 +93,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    ```
    → Server runs on http://localhost:8000
    
-7. **Verify it's working**
+6. **Verify it's working**
     - Open browser: http://localhost:8000/
       → Should return JSON like:
       ```JSON
