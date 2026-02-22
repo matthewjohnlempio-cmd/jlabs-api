@@ -71,6 +71,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
       - In Atlas Network Access → add `0.0.0.0/0` (allow all IPs for testing)
         
 4. **Seed the Test User**
+   
    The test user is created by the file:
    
    ```bash
