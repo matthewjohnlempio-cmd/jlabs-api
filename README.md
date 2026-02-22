@@ -46,7 +46,6 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    This file is not included in the repository for security reasons.
    
     - Create a new file called .env in the project root
-    - Or copy the example as a starting point:
    ```bash
    jlabs-api/                  ← root folder
    ├── api/
