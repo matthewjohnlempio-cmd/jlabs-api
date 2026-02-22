@@ -33,11 +33,13 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    git clone https://github.com/matthewjohnlempio-cmd/jlabs-api.git
    cd jlabs-api
 
-2. **Install dependencies**
+2. **Install dependencies**  
+   This command reads the `package.json` file and automatically installs all required packages (express, mongoose, bcryptjs, etc.).
+   
    ```bash
    npm install
 
-3. **Set up environment variables**
+4. **Set up environment variables**
    
    The project uses a .env file for secrets (MongoDB connection, etc.).
    This file is not included in the repository for security reasons.
@@ -70,7 +72,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
       - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
       - In Atlas Network Access → add `0.0.0.0/0` (allow all IPs for testing)
         
-4. **Seed the Test User**
+5. **Seed the Test User**
    
    The test user is created by the file:
    
