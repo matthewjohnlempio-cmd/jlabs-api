@@ -23,7 +23,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
 
 ## Prerequisites
 - Node.js v18+ and npm
-- MongoDB Atlas free-tier account (or local MongoDB instance)
+- MongoDB Atlas free-tier account
 
 ## Local Setup Instructions
 
