@@ -136,9 +136,5 @@ Troubleshooting
 
 ## License
 ISC
-Submitted for JLabs Developer Assessment – February 2026
-Matthew John Lempio
-- CORS enabled for the frontend
-- Health check endpoint (`GET /`)
-- Deployed serverlessly on Vercel
+Submitted for JLabs Developer Assessment – February 2026 Matthew John Lempio
 
