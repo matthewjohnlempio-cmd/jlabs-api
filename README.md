@@ -38,6 +38,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    npm install
 
 3. **Set up environment variables**
+   
    The project uses a .env file for secrets (MongoDB connection, etc.).
    This file is not included in the repository for security reasons.
     - Create a new file called .env in the project root (use any text editor)
@@ -68,14 +69,14 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
       - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
       - In Atlas Network Access → add `0.0.0.0/0` (allow all IPs for testing)
         
-5. **Seed the test user**
+4. **Seed the test user**
    Creates `devuser@jlabs.test` / `TestPass123!`
    ```bash
    node seed/userSeeder.js
    ```
    Expected output: "User seeded!"
 
-6. **Start the server**
+5. **Start the server**
    ```bash
    npm start
    # or
