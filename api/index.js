@@ -57,7 +57,7 @@ const waitForDb = async (req, res, next) => {
     next();
   } catch (err) {
     console.error('DB wait failed:', err.message);
-    res.status(503).json({ message: 'Database not ready yet, try again soon' });
+    res.status(503).json({ message: 'Database not ready yet, try submitting again' });
   }
 };
 
