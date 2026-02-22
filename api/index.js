@@ -6,16 +6,29 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
+// Improved CORS + explicit preflight
 app.use(cors({
   origin: [
+    'http://localhost:5173',  // Vite local
     'http://localhost:3000',
     'https://jlabs-web-six.vercel.app',
-    // Add more frontend domains if needed later
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,           // if you ever use cookies/sessions
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200,
 }));
+
+// Explicitly handle OPTIONS preflight for all routes (fixes many Vercel issues)
+app.options('*', (req, res) => {
+  res.set({
+    'Access-Control-Allow-Origin': req.headers.origin || '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Credentials': 'true',
+  });
+  res.sendStatus(200);
+});
 
 app.use(express.json());
 
@@ -25,9 +38,9 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('MongoDB Connection Error:', err));
 
 // Routes
-app.use(authRoutes);           // ← routes are mounted at root of the function (/api/login becomes /login)
+app.use(authRoutes);           // ← mounted at root (/login)
 
-// Optional: simple health check / root route
+// Health check
 app.get('/', (req, res) => {
   res.json({
     message: 'JLABS API is running',
@@ -35,7 +48,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// 404 handler (optional but nice)
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
