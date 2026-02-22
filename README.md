@@ -3,7 +3,16 @@
 This is the Node.js/Express backend for the JLabs Developer Assessment challenge.  
 It provides a simple authentication endpoint (`POST /login`) connected to MongoDB Atlas.
 
-**Live deployment**: https://jlabs-api.vercel.app/
+**Live deployment**: https://jlabs-web-six.vercel.app/
+
+   Test Login Credentials
+   
+      **Email**: admin@gmail.com 
+      
+      **Password**: 5211535
+
+**Backend repo**: https://github.com/matthewjohnlempio-cmd/jlabs-api
+**Backend live**: https://jlabs-api.vercel.app/
 
 ## Features
 - User login authentication with email/password
