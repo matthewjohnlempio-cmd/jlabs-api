@@ -10,7 +10,7 @@ const app = express();
 // CORS – dynamic and safe for your frontend
 // ──────────────────────────────────────────────
 const allowedOrigins = [
-  'http://localhost:5173',           // Vite default
+  'http://localhost:5173',           // Vite default local dev
   'http://localhost:3000',
   'https://jlabs-web-six.vercel.app',
   // Add preview branches if needed: 'https://jlabs-web-six-*.vercel.app'
@@ -33,61 +33,89 @@ app.use(cors({
 app.use(express.json());
 
 // ──────────────────────────────────────────────
-// Cached + retry MongoDB connection (critical for Vercel serverless)
+// Global cached DB connection (Vercel serverless best practice)
 // ──────────────────────────────────────────────
-let cachedConnection = null;
+let cachedDb = global.mongoose;
+
+if (!cachedDb) {
+  cachedDb = global.mongoose = { conn: null, promise: null, lastError: null, lastAttempt: null };
+}
 
 const connectDB = async () => {
-  // Reuse existing connection if already connected
-  if (cachedConnection && mongoose.connection.readyState === 1) {
-    console.log('Using existing MongoDB connection');
-    return;
+  if (cachedDb.conn && mongoose.connection.readyState === 1) {
+    console.log('Using cached MongoDB connection');
+    return cachedDb.conn;
   }
 
+  // Prevent multiple simultaneous connect attempts
+  if (cachedDb.promise) {
+    console.log('Connection already in progress — awaiting existing promise');
+    return cachedDb.promise;
+  }
+
+  cachedDb.lastAttempt = new Date().toISOString();
+
+  const uri = process.env.MONGO_URI;
+  if (!uri) {
+    const err = new Error('MONGO_URI environment variable is missing');
+    cachedDb.lastError = err.message;
+    throw err;
+  }
+
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('MongoDB connection timed out after 10s')), 10000)
+  );
+
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 5000,    // Fail faster → better logs
-      socketTimeoutMS: 45000,
-      maxPoolSize: 10,                   // Reasonable limit for serverless
-      family: 4,                         // Prefer IPv4 (fixes some DNS issues)
-      connectTimeoutMS: 10000,
+    console.log('Attempting MongoDB connection...');
+    cachedDb.promise = Promise.race([
+      mongoose.connect(uri, {
+        serverSelectionTimeoutMS: 4000,
+        socketTimeoutMS: 20000,
+        connectTimeoutMS: 10000,
+        maxPoolSize: 5,
+        minPoolSize: 1,
+        family: 4,
+        bufferCommands: false, // Prevent buffering timeouts
+      }),
+      timeoutPromise,
+    ]).then((conn) => {
+      cachedDb.conn = conn;
+      cachedDb.lastError = null;
+      console.log('MongoDB Connected successfully →', conn.connection.host);
+      return conn;
     });
 
-    cachedConnection = conn;
-    console.log('MongoDB Connected successfully →', conn.connection.host);
+    await cachedDb.promise;
+    return cachedDb.conn;
   } catch (err) {
-    console.error('MongoDB connection attempt FAILED:', {
+    cachedDb.promise = null;
+    cachedDb.lastError = {
       message: err.message,
-      code: err.code,
       name: err.name,
-      stack: err.stack?.substring(0, 300), // truncate for logs
-    });
-
-    // Simple retry after 2 seconds (only once per cold start)
-    setTimeout(() => {
-      console.log('Retrying MongoDB connection...');
-      connectDB();
-    }, 2000);
+      code: err.code,
+      reason: err.reason ? JSON.stringify(err.reason) : undefined,
+      stack: err.stack?.substring(0, 300),
+    };
+    console.error('MongoDB connection FAILED:', cachedDb.lastError);
+    // Retry once after delay
+    setTimeout(connectDB, 3000);
+    throw err; // Let caller handle
   }
 };
 
-// Start connection immediately (non-blocking)
-connectDB();
+// Initialize connection early (non-blocking)
+connectDB().catch((err) => console.error('Initial connection attempt failed:', err.message));
 
 // ──────────────────────────────────────────────
 // Routes
 // ──────────────────────────────────────────────
 app.use(authRoutes);
 
-// Health check with more debug info
-app.get('/', (req, res) => {
+// Health check with detailed debug
+app.get('/', async (req, res) => {
   const readyState = mongoose.connection.readyState;
-  const states = {
-    0: 'disconnected',
-    1: 'connected',
-    2: 'connecting',
-    3: 'disconnecting',
-  };
+  const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
 
   res.json({
     message: 'JLABS API is running',
@@ -95,12 +123,14 @@ app.get('/', (req, res) => {
     mongoStatus: states[readyState] || 'unknown',
     readyState,
     hasMongoUri: !!process.env.MONGO_URI,
+    lastAttempt: cachedDb.lastAttempt || 'never',
+    lastConnectionError: cachedDb.lastError || null,
     timestamp: new Date().toISOString(),
   });
 });
 
 // ──────────────────────────────────────────────
-// Global error handler – prevents full function crash
+// Global error handler – prevents function crashes
 // ──────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error('Unhandled server error:', {
