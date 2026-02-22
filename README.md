@@ -74,7 +74,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    # Get this from Atlas → Cluster → Connect → Drivers
    MONGO_URI=mongodb+srv://<your-username>:<your-password>@cluster1.ndbx1yn.mongodb.net/jlabs_db?retryWrites=true&w=majority
 
-   # Optional: server port (defaults to 8000)
+   # Server port (defaults to 8000)
    PORT=8000
    ```
    
