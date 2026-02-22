@@ -45,14 +45,20 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    The project uses a .env file for secrets (MongoDB connection, etc.).
    This file is not included in the repository for security reasons.
    
-    - Create a new file called .env in the project root (use any text editor)
+    - Create a new file called .env in the project root
     - Or copy the example as a starting point:
    ```bash
-   # Windows (PowerShell / CMD)
-   copy .env.example .env
-
-   # macOS / Linux
-   cp .env.example .env
+   jlabs-api/                  ← root folder
+   ├── api/
+   │   ├── index.js
+   │   └── ...
+   ├── models/
+   ├── routes/
+   ├── seed/
+   │   └── userSeeder.js
+   ├── .env                    ← CREATE THIS FILE HERE
+   ├── package.json
+   └── ...
    ```
    
    Open .env and add your values:
