@@ -6,49 +6,66 @@ require('dotenv').config();
 
 const app = express();
 
-// Improved CORS + explicit preflight
+// Dynamic CORS configuration – allows your frontend domains safely
+const allowedOrigins = [
+  'http://localhost:5173',          // Vite default local dev port
+  'http://localhost:3000',
+  'https://jlabs-web-six.vercel.app',
+  // Add preview URLs if needed later, e.g. 'https://jlabs-web-six-*-yourusername.vercel.app'
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',  // Vite local
-    'http://localhost:3000',
-    'https://jlabs-web-six.vercel.app',
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-  optionsSuccessStatus: 200,
+  optionsSuccessStatus: 200, // Fix for legacy browsers
 }));
-
-// Explicitly handle OPTIONS preflight for all routes (fixes many Vercel issues)
-app.options('*', (req, res) => {
-  res.set({
-    'Access-Control-Allow-Origin': req.headers.origin || '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Credentials': 'true',
-  });
-  res.sendStatus(200);
-});
 
 app.use(express.json());
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error('MongoDB Connection Error:', err));
+// Connect to MongoDB – non-blocking, logs errors without crashing app
+(async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('MongoDB Connected successfully');
+  } catch (err) {
+    console.error('MongoDB Connection Error:', err.message || err);
+    // Do NOT process.exit() or throw here – Vercel will retry cold starts
+  }
+})();
 
-// Routes
-app.use(authRoutes);           // ← mounted at root (/login)
+// Routes – mounted at root (/login, etc.)
+app.use(authRoutes);
 
-// Health check
+// Health check route (for testing deployment)
 app.get('/', (req, res) => {
   res.json({
     message: 'JLABS API is running',
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'production',
+    mongoStatus: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
   });
 });
 
-// 404 handler
+// Global error handler – catches ANY unhandled errors to prevent full crash
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err.stack || err.message || err);
+  res.status(500).json({
+    message: 'Internal Server Error',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined,
+  });
+});
+
+// 404 handler – must be last
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
