@@ -33,7 +33,8 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    git clone https://github.com/matthewjohnlempio-cmd/jlabs-api.git
    cd jlabs-api
 
-2. **Install dependencies**  
+2. **Install dependencies**
+   
    This command reads the `package.json` file and automatically installs all required packages (express, mongoose, bcryptjs, etc.).
    
    ```bash
