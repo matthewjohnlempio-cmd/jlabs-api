@@ -59,11 +59,12 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
 
    # Optional: server port (defaults to 8000)
    PORT=8000Tips:
-Tips:
-   - Replace <your-username> and <your-password> with your own Atlas credentials
-   - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
-   - In Atlas Network Access → add 0.0.0.0/0 (allow all IPs for testing)
-
-Replace `YOUR-USERNAME` before committing.
+-------------------
+   Tips:
+      - Replace <your-username> and <your-password> with your own Atlas credentials
+      - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
+      - In Atlas Network Access → add 0.0.0.0/0 (allow all IPs for testing)
+   
+   Replace `YOUR-USERNAME` before committing.
 
 
