@@ -33,11 +33,11 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    git clone https://github.com/YOUR-USERNAME/jlabs-api.git
    cd jlabs-api
 
-2. Install dependencies
+2. **Install dependencies**
    ```bash
    npm install
 
-3. Set up environment variables
+3. **Set up environment variables**
    The project uses a .env file for secrets (MongoDB connection, etc.).
    This file is not included in the repository for security reasons.
     - Create a new file called .env in the project root (use any text editor)
@@ -59,12 +59,26 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
 
    # Optional: server port (defaults to 8000)
    PORT=8000Tips:
--------------------
-   Tips:
-      - Replace <your-username> and <your-password> with your own Atlas credentials
-      - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
-      - In Atlas Network Access → add 0.0.0.0/0 (allow all IPs for testing)
+   ```
    
-   Replace `YOUR-USERNAME` before committing.
+   **Tips:**
+      - Replace `<your-username>` and `<your-password>` with your own Atlas credentials
+      - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
+      - In Atlas Network Access → add `0.0.0.0/0` (allow all IPs for testing)
+        
+4. **Seed the test user**
+   Creates `devuser@jlabs.test` / `TestPass123!`
+   ```bash
+   node seed/userSeeder.js
+   ```
+   Expected output: "User seeded!"
+
+5. **Start the server**
+   ```bash
+   npm start
+   # or
+   node api/index.js
+   ```
+   → Server runs on http://localhost:8000
 
 
