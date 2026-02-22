@@ -134,11 +134,11 @@ Troubleshooting
    - Port 8000 in use: Change PORT=8001 in .env or kill the process using the port
    - No response on localhost:8000: Make sure the server is running and terminal is not closed
 
-##License
-
-   ISC
-   
-   Submitted for JLabs Developer Assessment – February 2026
-   
-   Matthew John Lempio
+## Features
+- User login authentication with email/password
+- Passwords hashed using bcryptjs
+- MongoDB Atlas integration with Mongoose
+- CORS enabled for the frontend
+- Health check endpoint (`GET /`)
+- Deployed serverlessly on Vercel
 
