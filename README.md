@@ -92,15 +92,15 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
     - The email address is defined
     - The password is hashed before saving
 
-**Run the Seeder**
-```bash
-node seed/userSeeder.js
-```
-If successful, you should see:
-```bash
-Connected to MongoDB
-User seeded!
-```
+   **Run the Seeder**
+   ```bash
+   node seed/userSeeder.js
+   ```
+   If successful, you should see:
+   ```bash
+   Connected to MongoDB
+   User seeded!
+   ```
       
 
 6. **Start the server**
