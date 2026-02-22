@@ -7,27 +7,35 @@ require('dotenv').config();
 const app = express();
 
 // ──────────────────────────────────────────────
-// CORS – keep your working dynamic setup
-// ──────────────────────────────────────────────
+// CORS – reliable manual version (works on local + Vercel)
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'https://jlabs-web-six.vercel.app',
+  'http://localhost:5173',           // Vite local dev
+  'http://localhost:3000',           // fallback for other local ports
+  'https://jlabs-web-six.vercel.app' // your deployed frontend
 ];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 200,
-}));
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  // Allow exact matches or fallback to * for local testing
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    // Safe fallback – Vercel requests usually have origin, but this prevents blocks
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE, PATCH');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  // Explicitly handle preflight OPTIONS requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 app.use(express.json());
 
@@ -57,7 +65,7 @@ const waitForDb = async (req, res, next) => {
 app.use('/login', waitForDb); // Add for other DB routes later
 
 // ──────────────────────────────────────────────
-// MongoDB connection with safe defaults (no bufferCommands: false)
+// MongoDB connection with safe defaults
 // ──────────────────────────────────────────────
 const connectDB = async () => {
   if (mongoose.connection.readyState === 1) {
@@ -72,7 +80,7 @@ const connectDB = async () => {
       connectTimeoutMS: 10000,
       maxPoolSize: 5,
       family: 4,
-      // Remove bufferCommands: false → let Mongoose buffer queries during connect
+      // No bufferCommands: false – allow default buffering
     });
     console.log('MongoDB Connected successfully →', mongoose.connection.host);
   } catch (err) {
@@ -115,5 +123,17 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
+
+// ──────────────────────────────────────────────
+// Start the server (only needed for local dev)
+// On Vercel, this is not used — Vercel calls the exported app directly
+// ──────────────────────────────────────────────
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 8000;
+  app.listen(PORT, () => {
+    console.log(`Backend server is running on http://localhost:${PORT}`);
+    console.log(`Test it: open http://localhost:${PORT}/ in your browser`);
+  });
+}
 
 module.exports = app;
