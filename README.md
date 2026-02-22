@@ -30,7 +30,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/YOUR-USERNAME/jlabs-api.git](https://github.com/matthewjohnlempio-cmd/jlabs-api.git
+   git clone https://github.com/matthewjohnlempio-cmd/jlabs-api.git
    cd jlabs-api
 
 2. **Install dependencies**
