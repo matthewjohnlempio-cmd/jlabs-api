@@ -135,7 +135,10 @@ Troubleshooting
    - No response on localhost:8000: Make sure the server is running and terminal is not closed
 
 ##License
+
 ISC
+
 Submitted for JLabs Developer Assessment – February 2026
+
 Matthew John Lempio
 
