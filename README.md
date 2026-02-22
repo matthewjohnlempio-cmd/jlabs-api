@@ -49,8 +49,9 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
 
    # macOS / Linux
    cp .env.example .env
- 
-- Open .env and add your values:
+   ```
+   
+   Open .env and add your values:
   
    ```text
    # MongoDB Atlas connection string
@@ -62,18 +63,19 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    ```
    
    **Tips:**
+   
       - Replace `<your-username>` and `<your-password>` with your own Atlas credentials
       - If password contains special characters (@ / : ? # % &), URL-encode them (e.g. @ → %40)
       - In Atlas Network Access → add `0.0.0.0/0` (allow all IPs for testing)
         
-4. **Seed the test user**
+5. **Seed the test user**
    Creates `devuser@jlabs.test` / `TestPass123!`
    ```bash
    node seed/userSeeder.js
    ```
    Expected output: "User seeded!"
 
-5. **Start the server**
+6. **Start the server**
    ```bash
    npm start
    # or
