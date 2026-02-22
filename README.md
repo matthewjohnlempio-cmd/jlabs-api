@@ -136,5 +136,6 @@ Troubleshooting
 
 ## License
 ISC
+
 Submitted for JLabs Developer Assessment – February 2026 Matthew John Lempio
 
