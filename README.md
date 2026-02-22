@@ -33,16 +33,23 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    git clone https://github.com/YOUR-USERNAME/jlabs-api.git
    cd jlabs-api
 
-Install dependenciesBashnpm install
-Set up environment variablesThe project uses a .env file for secrets (MongoDB connection, etc.).
-This file is not included in the repository for security reasons.
-Create a new file called .env in the project root (use any text editor)
-Or copy the example as a starting point:Bash# Windows (PowerShell / CMD)
-copy .env.example .env
+2. Install dependencies
+   ```bash
+   npm install
 
-# macOS / Linux
-cp .env.example .env
-Open .env and add your values:text# MongoDB Atlas connection string
+3. Set up environment variables
+   The project uses a .env file for secrets (MongoDB connection, etc.).
+   This file is not included in the repository for security reasons.
+    - Create a new file called .env in the project root (use any text editor)
+    - Or copy the example as a starting point:
+   ```bash
+   # Windows (PowerShell / CMD)
+   copy .env.example .env
+
+   # macOS / Linux
+   cp .env.example .env
+ 
+   - Open .env and add your values:text# MongoDB Atlas connection string
 # Get this from Atlas → Cluster → Connect → Drivers
 MONGO_URI=mongodb+srv://<your-username>:<your-password>@cluster1.ndbx1yn.mongodb.net/jlabs_db?retryWrites=true&w=majority
 
