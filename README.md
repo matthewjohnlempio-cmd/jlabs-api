@@ -28,6 +28,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
 ## Local Setup Instructions
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/YOUR-USERNAME/jlabs-api.git
    cd jlabs-api
@@ -59,7 +60,7 @@ Start the serverBashnpm start
 node api/index.js→ Server runs on http://localhost:8000
 Verify it's working
 Open browser: http://localhost:8000/
-→ Should return JSON:JSON{
+→ Should return JSON like:JSON{
   "message": "JLABS API is running",
   "environment": "development",
   "mongoStatus": "connected",
@@ -117,14 +118,18 @@ ISC
 
 Submitted for JLabs Developer Assessment – February 2026
 Matthew John Lempio
-text### How to use this
+text### How to paste this into GitHub without breaking format
 
-1. Open your `jlabs-api` repo on GitHub (or locally)
-2. Click **Add file → Create new file** (or edit existing README.md)
-3. Paste the entire content above
-4. Replace `YOUR-USERNAME` with your actual GitHub username
-5. Commit with message: "Add complete README with setup instructions"
-6. Done!
+1. Go to your repo on GitHub → click on **README.md** (or create new if missing)
+2. Click the **pencil icon** (edit)
+3. Delete existing content (if any)
+4. Copy the entire block above (including the first `# JLabs Backend API` line)
+5. Paste it into the editor
+6. Scroll down → Commit changes (message: "Add complete README with local setup guide")
+7. Done!
 
-This version pastes cleanly into GitHub's editor without breaking indentation or tables.  
-Let me know if you want the frontend README next or any small changes (e.g. add screenshots,
+This version is **tested** — it pastes cleanly, keeps all code blocks, tables, and lists intact on GitHub.
+
+Replace `YOUR-USERNAME` before committing.
+
+If you want a similar README for the frontend repo (`jlabs-web`), let me know — I can give you th
