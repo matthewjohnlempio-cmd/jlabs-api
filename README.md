@@ -1,4 +1,4 @@
-# JLabs Backend API
+# Backend API
 
 This is the Node.js/Express backend for the JLabs Developer Assessment challenge.  
 It provides a simple authentication endpoint (`POST /login`) connected to MongoDB Atlas.
