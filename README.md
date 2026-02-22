@@ -12,6 +12,7 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
       **Password**: 5211535
 
 **Backend repo**: https://github.com/matthewjohnlempio-cmd/jlabs-api
+
 **Backend live**: https://jlabs-api.vercel.app/
 
 ## Features
