@@ -83,5 +83,17 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
    node api/index.js
    ```
    → Server runs on http://localhost:8000
-
+   
+6. **Verify it's working**
+    - Open browser: http://localhost:8000/
+      → Should return JSON like:
+      ```JSON
+      {
+        "message": "JLABS API is running",
+        "environment": "development",
+        "mongoStatus": "connected",
+        ...
+      }
+      ```
+    - Test login (using curl or Postman):
 
