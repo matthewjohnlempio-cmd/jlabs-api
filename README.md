@@ -95,5 +95,5 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
         ...
       }
       ```
-    - Test login (using curl or Postman):
+
 
