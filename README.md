@@ -129,5 +129,13 @@ It provides a simple authentication endpoint (`POST /login`) connected to MongoD
         ...
       }
       ```
+Troubleshooting
+   - MongoDB connection fails: Check MONGO_URI format, password encoding, and Atlas Network Access (0.0.0.0/0)
+   - Port 8000 in use: Change PORT=8001 in .env or kill the process using the port
+   - No response on localhost:8000: Make sure the server is running and terminal is not closed
 
+##License
+ISC
+Submitted for JLabs Developer Assessment – February 2026
+Matthew John Lempio
 
