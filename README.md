@@ -66,4 +66,4 @@ Tips:
 
 Replace `YOUR-USERNAME` before committing.
 
-If you want a similar README for the frontend repo (`jlabs-web`), let me know — I can give you th
+
