@@ -1,1 +1,78 @@
-read me
+# JLabs Backend API
+
+This is the Node.js/Express backend for the JLabs Developer Assessment challenge.  
+It provides a simple authentication endpoint (`POST /login`) connected to MongoDB Atlas.
+
+**Live deployment**: https://jlabs-api.vercel.app/
+
+## Features
+- User login authentication with email/password
+- Passwords hashed using bcryptjs
+- MongoDB Atlas integration with Mongoose
+- CORS enabled for the frontend
+- Health check endpoint (`GET /`)
+- Deployed serverlessly on Vercel
+
+## Tech Stack
+- Node.js + Express
+- MongoDB (Atlas) + Mongoose
+- bcryptjs (password hashing)
+- dotenv (environment variables)
+- cors (cross-origin requests)
+- Vercel (serverless deployment)
+
+## Prerequisites
+- Node.js v18+ and npm
+- MongoDB Atlas free-tier account (or local MongoDB instance)
+
+## Local Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/jlabs-api.git
+   cd jlabs-api
+
+Install dependenciesBashnpm install
+Set up environment variables
+Copy the example file:Bashcopy .env.example .env(or cp .env.example .env on macOS/Linux)
+Open .env and add your MongoDB Atlas connection string:textMONGO_URI=mongodb+srv://<username>:<password>@cluster1.ndbx1yn.mongodb.net/jlabs_db?retryWrites=true&w=majority
+PORT=8000               # optional, defaults to 8000How to get MONGO_URI:
+Go to MongoDB Atlas → your cluster → Connect → Drivers
+Replace <username> and <password> (encode special chars in password!)
+Add /jlabs_db after .net/ if not present
+In Atlas Network Access → Add 0.0.0.0/0 (allow all IPs)
+
+
+Seed the test user
+This creates a test account:
+Email: devuser@jlabs.test
+Password: TestPass123!Bashnode seed/userSeeder.jsExpected output: "User seeded!"
+Start the serverBashnpm startorBashnode api/index.jsServer will run on: http://localhost:8000
+Verify it's working
+Open browser: http://localhost:8000/
+→ Should return JSON:JSON{
+  "message": "JLABS API is running",
+  "environment": "development",
+  "mongoStatus": "connected",
+  ...
+}
+Test login (using curl or Postman):Bashcurl -X POST http://localhost:8000/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"devuser@jlabs.test","password":"TestPass123!"}'Expected success:JSON{"message":"Login successful","token":"dummy-token-for-now"}
+
+
+API Endpoints
+MethodPathDescriptionRequest Body (JSON)Response (success)POST/loginAuthenticate user{ "email", "password" }{ "message": "Login successful", "token": "..." }GET/Health check & DB status—{ "message": "...", "mongoStatus": "connected" }
+Deployment (Vercel)
+Already deployed at: https://jlabs-api.vercel.app/
+Environment variables configured in Vercel dashboard:
+
+MONGO_URI = production Atlas connection string
+
+Vercel runs the exported Express app directly (no app.listen() needed).
+Security & Notes
+
+.env is not committed (protected by .gitignore)
+Passwords are hashed with bcryptjs
+CORS restricted to frontend origins
+Uses MongoDB Atlas free tier (no local DB required)
